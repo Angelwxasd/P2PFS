@@ -62,23 +62,10 @@
     <string>Eliminar</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="HistorialBtn">
-   <property name="geometry">
-    <rect>
-     <x>200</x>
-     <y>410</y>
-     <width>161</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Historial Operaciones</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="PeersBtn">
    <property name="geometry">
     <rect>
-     <x>480</x>
+     <x>300</x>
      <y>410</y>
      <width>161</width>
      <height>41</height>
