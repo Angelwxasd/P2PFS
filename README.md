@@ -3,23 +3,26 @@
 #### Actualmente realizamos las siguientes operaciones:
 1. Crear Directorios 
   mkdir
-2. Escribir Archivos
-  write
-3. Transferir Archivos Binarios (Mejorar, editar para que permita transferir archivos pero de un nodo en específico)
+2. Transferir Archivos
    transfer
-4. Eliminar Archivos o Directorios
+3. Eliminar Archivos o Directorios
   delete
-5. Listar contenido
+4. Listar contenido (Se realiza en automático)
   list
-6. Mostrar historial de operaciones
-  log
-7. Mostrar Peers
+7. Mostrar Peers (Tanto conectados como los que se conocen pero están desconectados)
   peers
-8. Esperar indefinidamente (Cómo funciona este comando?)
 
-Cada operación se registra como un diccionario con id, cmd, y campos adicionales según el tipo.
-
+#### Estructura para correr el programa
 
 Para ejecutar el programa se propone la siguiente sintaxis:
   python gui_main.py --id 1 --port 5000 \
   --peers 127.0.0.1:5001,127.0.0.1:5002 --root fs1
+
+**--id X**: Identificador numérico único para este nodo (debe diferir de los demás).
+--port 5000: Puerto TCP en el que este nodo escucha conexiones entrantes de peers.
+--peers 127.0.0.1:5001,127.0.0.1:5002: No incluye al propio nodo. Aquí le dices con quién debe sincronizar y reenviar operaciones.
+--root fs1: Carpeta local donde este nodo mantiene su copia del sistema de archivos distribuido. Si no existe, se crea al arrancar.
+
+
+
+  
