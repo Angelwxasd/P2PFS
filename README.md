@@ -12,6 +12,15 @@
 7. Mostrar Peers (Tanto conectados como los que se conocen pero están desconectados)
   peers
 
+### Para correr el archivo se necesita:
+
+1. Python 3.7 (o superior)
+  python --version
+2. PySide6 (para la interfaz gráfica)
+  pip install PySide6
+3. Asegurar que el puerto que elijas esté permitido en el firewall local
+
+
 #### Estructura para correr el programa
 
 Para ejecutar el programa se propone la siguiente sintaxis:
@@ -33,5 +42,10 @@ Entonces aparecerá la siguiente interfaz:
 ## TOLERANTE A FALLOS:
 Si un nodo se desconecta y se vuelve a conectar, este nodo busca cuál de los peers tiene el log más largo y lo aplica a su log.
 
+Si alguno está offline, la conexión a ese peer falla y se omite, pero el resto de peers vivos reciben la operación.
 
-  
+No hay un nodo maestro ni votaciones que detengan el sistema si faltan nodos (por lo que no es como en raft fundamentalmente).
+
+Tras un fallo de red o un reinicio, las operaciones pendientes hacia peers caídos se ignoran temporalmente, pero el bucle de sync posterior garantiza que nada se pierda: cualquier operación que no llegó a un peer será recuperada cuando éste arranque y pida el log más largo.
+
+
