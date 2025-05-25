@@ -32,6 +32,7 @@ Para ejecutar el programa se propone la siguiente sintaxis:
 **--port 5000**: Puerto TCP en el que este nodo escucha conexiones entrantes de peers.
 
 **--peers 127.0.0.1:5001,127.0.0.1:5002**: No incluye al propio nodo. Aquí le dices con quién debe sincronizar y reenviar operaciones.
+  Por ejemplo: --peers IPNodo2:5002, IPNodo3:50003, IPNodo4:5004 (esto es suponiendo que yo soy en NODO1, por lo que no agrego mi ip aquí)
 
 **--root fs1**: Carpeta local donde este nodo mantiene su copia del sistema de archivos distribuido. Si no existe, se crea al arrancar.
 
