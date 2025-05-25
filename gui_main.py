@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import sys, os, argparse, signal, pathlib, posixpath, socket
+import sys, os, argparse, signal, pathlib, posixpath
 from PySide6.QtWidgets import (QApplication, QMessageBox, QFileDialog,
                                QPushButton, QLineEdit, QListWidget)
 from PySide6.QtUiTools import QUiLoader
@@ -12,7 +12,6 @@ def parse_peers(text):
     if not text:
         return []
     return [(h, int(p)) for h, p in (item.split(':') for item in text.split(','))]
-
 
 def graceful_exit(sig, frame):
     print("\nCerrando aplicación…")
@@ -49,37 +48,34 @@ class GuiApp:
 
     # -------------------------------
     def _wire_widgets(self):
-        # ---- Listas ----
+        # Listas
         self.fileList: QListWidget      = self.window.findChild(QListWidget, "fileList")
         self.registrosList: QListWidget = self.window.findChild(QListWidget, "RegistrosList")
 
-        # ---- Botones principales ----
+        # Transferir archivo
         btn_transfer = self.window.findChild(QPushButton, "btnTransfer")
         self.txt_dest: QLineEdit = self.window.findChild(QLineEdit, "lineEdit_2")
         if btn_transfer:
             btn_transfer.clicked.connect(self._slot_transfer)
 
+        # Crear directorio
         btn_mkdir = self.window.findChild(QPushButton, "btnMkdir")
         self.txt_mkdir: QLineEdit = self.window.findChild(QLineEdit, "lineaEdit1")
         if btn_mkdir:
             btn_mkdir.clicked.connect(self._slot_mkdir)
 
+        # Eliminar archivo/directorio
         btn_delete = self.window.findChild(QPushButton, "btnDelete")
         if btn_delete:
             btn_delete.clicked.connect(self._slot_delete)
 
-        # ---- NUEVOS Botones ----
-        btn_hist = self.window.findChild(QPushButton, "HistorialBtn")
-        if btn_hist:
-            btn_hist.clicked.connect(self._slot_show_history)
-
+        # Peers conectados
         btn_peers = self.window.findChild(QPushButton, "PeersBtn")
         if btn_peers:
             btn_peers.clicked.connect(self._slot_show_peers)
 
     # -------------------------------
     # SUBIR ARCHIVO
-    # -------------------------------
     def _slot_transfer(self):
         src_path, _ = QFileDialog.getOpenFileName(self.window, "Selecciona archivo")
         if not src_path:
@@ -96,7 +92,7 @@ class GuiApp:
         try:
             self.node.op_mkdir(dest_dir)
             self.node.op_transfer(src_path, dest_path)
-            QMessageBox.information(self.window, "Éxito",
+            QMessageBox.information(self.window, "Éxito", 
                                      f"Archivo '{src_path}' replicado en {dest_path}")
             self.refresh_file_list()
         except Exception as e:
@@ -104,11 +100,10 @@ class GuiApp:
 
     # -------------------------------
     # CREAR DIRECTORIO
-    # -------------------------------
     def _slot_mkdir(self):
         path = self.txt_mkdir.text().strip() if self.txt_mkdir else ""
         if not path:
-            QMessageBox.warning(self.window, "Ruta vacía",
+            QMessageBox.warning(self.window, "Ruta vacía", 
                                 "Ingresa el nombre/directorio (ej. /docs).")
             return
         if not path.startswith("/"):
@@ -122,10 +117,9 @@ class GuiApp:
 
     # -------------------------------
     # ELIMINAR ARCHIVO/DIRECTORIO
-    # -------------------------------
     def _slot_delete(self):
         if not self.fileList or not self.fileList.currentItem():
-            QMessageBox.warning(self.window, "Sin selección",
+            QMessageBox.warning(self.window, "Sin selección", 
                                 "Selecciona un archivo o directorio en la lista.")
             return
 
@@ -148,38 +142,20 @@ class GuiApp:
             QMessageBox.critical(self.window, "Error", str(e))
 
     # -------------------------------
-    # MOSTRAR HISTORIAL
-    # -------------------------------
-    def _slot_show_history(self):
-        if not getattr(self, "registrosList", None):
-            return
-        self.registrosList.clear()
-        if not getattr(self.node, "log", None):
-            self.registrosList.addItem("Sin operaciones registradas.")
-            return
-        for entry in self.node.log:
-            self.registrosList.addItem(str(entry))
-
-    # -------------------------------
     # MOSTRAR PEERS
-    # -------------------------------
     def _slot_show_peers(self):
         if not getattr(self, "registrosList", None):
             return
         self.registrosList.clear()
-
-        for host, port in self.node.peers:
-            try:
-                with socket.create_connection((host, port), timeout=0.5):
-                    status = "ONLINE"
-            except OSError:
-                status = "OFFLINE"
-            self.registrosList.addItem(f"{host}:{port}  [{status}]")
-
+        peers = getattr(self.node, "peers", [])
+        if not peers:
+            self.registrosList.addItem("Sin peers conectados.")
+            return
+        for host, port in peers:
+            self.registrosList.addItem(f"{host}:{port}")
 
     # -------------------------------
     # REFRESCAR LISTA DE ARCHIVOS
-    # -------------------------------
     def refresh_file_list(self):
         if not getattr(self, "fileList", None):
             return
