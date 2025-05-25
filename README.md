@@ -26,7 +26,12 @@ Para ejecutar el programa se propone la siguiente sintaxis:
 
 **--root fs1**: Carpeta local donde este nodo mantiene su copia del sistema de archivos distribuido. Si no existe, se crea al arrancar.
 
+Entonces aparecerá la siguiente interfaz:
+![image](https://github.com/user-attachments/assets/651830a1-7e0f-4904-b50c-1a730ae07b7b)
 
+
+## TOLERANTE A FALLOS:
+Si un nodo se desconecta y se vuelve a conectar, este nodo busca cuál de los peers tiene el log más largo y lo aplica a su log.
 
 
   
