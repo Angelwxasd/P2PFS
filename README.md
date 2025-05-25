@@ -18,3 +18,8 @@
 8. Esperar indefinidamente (Cómo funciona este comando?)
 
 Cada operación se registra como un diccionario con id, cmd, y campos adicionales según el tipo.
+
+
+Para ejecutar el programa se propone la siguiente sintaxis:
+  python gui_main.py --id 1 --port 5000 \
+  --peers 127.0.0.1:5001,127.0.0.1:5002 --root fs1
